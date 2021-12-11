@@ -6,41 +6,44 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 12:07:39 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 13:37:02 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 16:02:37 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
 
 t_pair
-make_pair(char *key, char *value)
+	make_pair(char *key, char *value)
 {
 	t_pair	new;
 
 	new.key = key;
 	new.value = value;
-	return new;
+	return (new);
 }
 
 t_element *
-find_elem(char *key, t_map *map)
+	find_elem(char *key, t_map *map)
 {
-	t_element *	elem;
+	t_element	*elem;
+	int			res;
 
 	elem = map->root;
 	while (elem && elem->pair.value)
 	{
-		if (elem->pair.key == key)
+		res = ft_strncmp(elem->pair.key, key, ft_strlen(key) + 1);
+		if (!res)
 			return (elem);
-		elem = elem->child[elem->pair.key < key];
+		elem = elem->child[res < 0];
 	}
 	return (0);
 }
 
 void
-print_value(char *key, t_map *map)
+	print_value(char *key, t_map *map)
 {
-	t_element *elem;
+	t_element	*elem;
+
 	elem = find_elem(key, map);
 	if (elem)
 	{
@@ -50,17 +53,17 @@ print_value(char *key, t_map *map)
 	else
 	{
 		ft_putstr_fd(key, 1);
-		ft_putstr_fd(": Not found.\n", 1); // pas opti
+		ft_putstr_fd(": Not found.\n", 1);
 	}
 }
 
 t_element *
-empty_elem(t_element *parent)
+	empty_elem(t_element *parent)
 {
-	t_element *new;
+	t_element	*new;
 
-	new = malloc(sizeof(t_element));
-	ft_bzero(new, sizeof(*new));
+	new = malloc(sizeof (t_element));
+	ft_bzero(new, sizeof (*new));
 	new->parent = parent;
-	return(new);
+	return (new);
 }

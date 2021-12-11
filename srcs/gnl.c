@@ -6,24 +6,30 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 12:36:58 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 11:24:51 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 16:16:36 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl.h"
 
-static int		ft_first_read(t_buf *tab, int fd, int *i)
+static int
+	ft_first_read(t_buf *tab, int fd, int *i)
 {
-	if ((*i = read(fd, tab->buf[0], B)) == -1)
+	*i = read(fd, tab->buf[0], B);
+	if (*i < 0)
 		return (0);
 	tab->buf[0][*i] = 0;
-	tab->r = (*i == B ? 0 : 1);
+	if (*i == B)
+		tab->r = 0;
+	else
+		tab->r = 1;
 	if (i != 0 && tab->r == 1 && tab->buf[0][*i - 1] == '\n')
 		tab->r = 2;
 	return (1);
 }
 
-static int		ft_check(char *str)
+static int
+	ft_check(char *str)
 {
 	int		i;
 
@@ -37,7 +43,8 @@ static int		ft_check(char *str)
 	return (-1);
 }
 
-static int		ft_copy(char **line, t_buf *tab, char **str)
+static int
+	ft_copy(char **line, t_buf *tab, char **str)
 {
 	int		i;
 	int		j;
@@ -50,7 +57,8 @@ static int		ft_copy(char **line, t_buf *tab, char **str)
 		i++;
 	}
 	temp_buf[i] = 0;
-	if (!(*line = ft_strjoin(*str, temp_buf)))
+	*line = ft_strjoin(*str, temp_buf);
+	if (!(*line))
 		return (0);
 	j = 0;
 	while (tab->buf[0][i] != 0 && tab->buf[0][++i])
@@ -62,11 +70,14 @@ static int		ft_copy(char **line, t_buf *tab, char **str)
 	return (1);
 }
 
-static int		ft_str(char **str, t_buf *tab, int fd, int *i)
+static int
+	ft_str(char **str, t_buf *tab, int fd, int *i)
 {
-	if (!(*str = ft_strjoin(*str, tab->buf[0])))
+	*str = ft_strjoin(*str, tab->buf[0]);
+	if (!(*str))
 		return (0);
-	if ((*i = read(fd, tab->buf[0], B)) == -1)
+	*i = read(fd, tab->buf[0], B);
+	if (*i < -1)
 	{
 		free(*str);
 		return (0);
@@ -79,7 +90,8 @@ static int		ft_str(char **str, t_buf *tab, int fd, int *i)
 	return (1);
 }
 
-int				get_next_line(int fd, char **line)
+int
+	get_next_line(int fd, char **line)
 {
 	static t_buf	tab = {.buf[0][0] = -1, .r = 0};
 	int				i;

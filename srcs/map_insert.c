@@ -6,17 +6,20 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 12:56:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 13:38:10 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 16:56:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
 
-void	rotate(t_element * rhs, int dir, t_map *map)
+void
+	rotate(t_element *rhs, int dir, t_map *map)
 {
+	t_element	*tmp;
+
 	if (!rhs)
 		return ;
-	t_element * tmp = rhs->child[!dir];
+	tmp = rhs->child[!dir];
 	rhs->child[!dir] = tmp->child[dir];
 	tmp->child[dir]->parent = rhs;
 	tmp->child[dir] = rhs;
@@ -29,9 +32,10 @@ void	rotate(t_element * rhs, int dir, t_map *map)
 	rhs->parent = tmp;
 }
 
-void	simple_insert(t_element * new_elem, t_map *map)
+void
+	simple_insert(t_element *new_elem, t_map *map)
 {
-	t_element *	i;
+	t_element	*i;
 	int			dir;
 
 	i = map->root;
@@ -43,7 +47,7 @@ void	simple_insert(t_element * new_elem, t_map *map)
 	}
 	while (i->pair.value)
 	{
-		dir = i->pair.value < new_elem->pair.value;
+		dir = ft_strncmp(i->pair.key, new_elem->pair.key, ft_strlen(i->pair.key) + 1) < 0;
 		if (i->child[dir] && i->child[dir]->pair.value)
 			i = i->child[dir];
 		else
@@ -56,46 +60,53 @@ void	simple_insert(t_element * new_elem, t_map *map)
 	}
 }
 
-void	red_black(t_element * elem, t_map *map)
+t_element *
+	red_black_loop(t_element *elem, t_map *map)
 {
 	int			dir;
-	t_element *	uncle;
+	t_element	*uncle;
 
-	dir = LEFT;
+	uncle = get_uncle(elem);
+	dir = side(elem->parent);
+	if (uncle && uncle->color == RED)
+	{
+		elem->parent->color = BLACK;
+		uncle->color = BLACK;
+		uncle->parent->color = RED;
+		elem = get_grand_parent(elem);
+	}
+	else if (side(elem) == !dir)
+	{
+		elem = elem->parent;
+		rotate(elem, dir, map);
+	}
+	else
+	{
+		elem->parent->color = BLACK;
+		get_grand_parent(elem)->color = RED;
+		elem = get_grand_parent(elem);
+		rotate(elem, !dir, map);
+	}
+	return (elem);
+}
+
+void
+	red_black(t_element *elem, t_map *map)
+{
 	if (map->root == elem)
 	{
 		elem->color = BLACK;
 		return ;
 	}
-	while(elem != map->root && elem->parent->color == RED)
+	while (elem != map->root && elem->parent->color == RED)
 	{
-		uncle = get_uncle(elem);
-		dir = side(elem->parent);
-		if (uncle && uncle->color == RED)
-		{
-			elem->parent->color = BLACK;
-			uncle->color = BLACK;
-			uncle->parent->color = RED;
-			elem = get_grand_parent(elem);
-		}
-		else if (side(elem) == !dir)
-		{
-			elem = elem->parent;
-			rotate(elem, dir, map);
-		}
-		else
-		{
-			elem->parent->color = BLACK;
-			get_grand_parent(elem)->color = RED;
-			elem = get_grand_parent(elem);
-			rotate(elem, !dir, map);
-		}
+		elem = red_black_loop(elem, map);
 		map->root->color = BLACK;
 	}
 }
 
 void
-map_insert(t_pair new_pair, t_map *map)
+	map_insert(t_pair new_pair, t_map *map)
 {
 	t_element	*new_elem;
 
