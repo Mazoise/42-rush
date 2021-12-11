@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 12:56:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 16:56:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:05:42 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void
 	}
 	while (i->pair.value)
 	{
-		dir = ft_strncmp(i->pair.key, new_elem->pair.key, ft_strlen(i->pair.key) + 1) < 0;
+		dir = ft_strcmp(i->pair.key, new_elem->pair.key) < 0;
 		if (i->child[dir] && i->child[dir]->pair.value)
 			i = i->child[dir];
 		else

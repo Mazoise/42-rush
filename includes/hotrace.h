@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:03:37 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 16:41:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:06:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_element
 t_element
 *get_uncle(t_element *elem);
 int
-ft_strncmp(const char *s1, const char *s2, size_t n);
+ft_strcmp(const char *s1, const char *s2);
 size_t
 ft_strlen(const char *s);
 

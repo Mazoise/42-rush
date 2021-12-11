@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 12:07:39 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 16:02:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:05:57 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_element *
 	elem = map->root;
 	while (elem && elem->pair.value)
 	{
-		res = ft_strncmp(elem->pair.key, key, ft_strlen(key) + 1);
+		res = ft_strcmp(elem->pair.key, key);
 		if (!res)
 			return (elem);
 		elem = elem->child[res < 0];

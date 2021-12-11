@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 21:28:24 by mchardin          #+#    #+#             */
-/*   Updated: 2021/12/11 16:23:01 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:05:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ void
 }
 
 int
-	ft_strncmp(const char *s1, const char *s2, size_t n)
+	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
+	size_t	n;
 
+	n = ft_strlen(s1) + 1;
 	i = 0;
 	while ((s1[i] || s2[i]) && i < n)
 	{
